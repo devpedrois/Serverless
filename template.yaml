@@ -1,0 +1,30 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Guia de transporte do Rota Vital no SAM local
+
+Parameters:
+  TempoLimite:
+    Type: Number
+    Default: 3
+    AllowedValues:
+      - 3
+      - 10
+
+Globals:
+  Function:
+    Timeout: !Ref TempoLimite
+    MemorySize: 128
+
+Resources:
+  GuiaTransporteFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: guia_transporte/
+      Handler: app.lambda_handler
+      Runtime: python3.12
+      Events:
+        PostGuias:
+          Type: Api
+          Properties:
+            Path: /guias
+            Method: POST
